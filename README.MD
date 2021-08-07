@@ -60,10 +60,11 @@ class Rating(BaseModel):
 					"class": float
 				},
 				"tours_status": str,
-				"restos_status" str,
-				"hotels_status" str
+				"restos_status": str,
+				"hotels_status": str
 			}
 		}
 	}
 }
 ```
+:shipit::shipit::shipit:

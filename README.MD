@@ -8,10 +8,14 @@ Requests
 Uvicorn
 FastAPI
 
+```
 $ pip install pandas requests uvicorn[standard] fastapi pydantic starlette typing datetime
+```
 
 #### Start the service
+```
 $ uvicorn main:app --reload
+```
 
 ##### Testing Guide
 

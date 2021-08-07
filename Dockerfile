@@ -13,6 +13,8 @@ RUN pip install pandas requests uvicorn[standard] fastapi pydantic starlette typ
 # copy the content of the local src directory to the working directory
 # COPY src/ .
 
+EXPOSE 80
+
 # command to run on container start
 # uvicorn main:app --reload
-CMD [ "uvicon", "main:app", "--reload" ]
+CMD [ "uvicon", "main:app", "--reload", "--port", "80" ]

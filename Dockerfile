@@ -8,7 +8,7 @@ WORKDIR /code
 # COPY requirements.txt .
 
 # install dependencies
-RUN pip install fastapi uvicorn[standard]
+RUN pip install pandas requests uvicorn[standard] fastapi pydantic starlette typing datetime
 
 # copy the content of the local src directory to the working directory
 # COPY src/ .

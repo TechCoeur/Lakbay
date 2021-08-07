@@ -14,4 +14,4 @@ RUN pip install fastapi uvicorn[standard]
 # COPY src/ .
 
 # command to run on container start
-CMD [ "python", "./server.py" ]
+CMD [ "python", "./main.py" ]

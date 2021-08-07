@@ -11,7 +11,7 @@ WORKDIR /code
 RUN pip install fastapi uvicorn[standard]
 
 # copy the content of the local src directory to the working directory
-COPY src/ .
+# COPY src/ .
 
 # command to run on container start
 CMD [ "python", "./server.py" ]

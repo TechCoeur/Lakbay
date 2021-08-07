@@ -16,6 +16,7 @@ $ uvicorn main:app --reload
 ##### Testing Guide
 
 ##### Mobile App Endpoint
+```javascript
 class Rating(BaseModel):
 	name: str = None
 	city: Dict[str,str]
@@ -26,8 +27,9 @@ class Rating(BaseModel):
 	status_tours: str = None
 	status_restos: str = None
 	status_hotels: str = None
-
+```
 ##### Expected JSONResponse on Database
+```javascript
 {
 	"travelplan": {
 		"user_id": {
@@ -60,3 +62,4 @@ class Rating(BaseModel):
 		}
 	}
 }
+```

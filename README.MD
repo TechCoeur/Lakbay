@@ -67,4 +67,52 @@ class Rating(BaseModel):
 	}
 }
 ```
+
+#### Request samples
+```javascript
+{
+  "name": "string",
+  "city": {
+    "property1": "string",
+    "property2": "string"
+  },
+  "ownerId": "string",
+  "ratingRange": 0,
+  "attractionTags": {
+    "property1": "string",
+    "property2": "string"
+  },
+  "hotelTags": {
+    "property1": "string",
+    "property2": "string"
+  },
+  "status_tours": "string",
+  "status_restos": "string",
+  "status_hotels": "string"
+}
+```
+
+#### Response samples
+```javascript
+{
+  "name": "string",
+  "city": {
+    "property1": "string",
+    "property2": "string"
+  },
+  "ownerId": "string",
+  "ratingRange": 0,
+  "attractionTags": {
+    "property1": "string",
+    "property2": "string"
+  },
+  "hotelTags": {
+    "property1": "string",
+    "property2": "string"
+  },
+  "status_tours": "string",
+  "status_restos": "string",
+  "status_hotels": "string"
+}
+```
 :shipit::shipit::shipit:

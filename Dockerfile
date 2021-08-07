@@ -14,4 +14,5 @@ RUN pip install fastapi uvicorn[standard]
 # COPY src/ .
 
 # command to run on container start
-CMD [ "python", "./main.py" ]
+# uvicorn main:app --reload
+CMD [ "uvicon", "main:app", "--reload" ]

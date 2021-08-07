@@ -32,11 +32,24 @@ class Rating(BaseModel):
 	status_restos: str = None
 	status_hotels: str = None
 ```
-##### Expected JSONResponse on Database
+##### Expected JSONResponse on Firebase Realtime Database
+https://lakbayph-88c82.firebaseio.com/
 ```javascript
 {
+	"preferences": {
+		"user_id": str {
+			"city": {
+				"id": int,
+				"name": str
+			}
+			"ownerId": str,
+			"ratingRange": int
+		}
+	}
+}		
+{
 	"travelplan": {
-		"user_id": {
+		"user_id": str {
 			"plan_1" : {
 				"tours": {
 					"name": str,
@@ -67,8 +80,9 @@ class Rating(BaseModel):
 	}
 }
 ```
+*not used parents for recommender:  "mostbooked", "orders", "products", "travelplans"
 
-#### Request samples
+#### FastAPI Request samples
 ```javascript
 {
   "name": "string",

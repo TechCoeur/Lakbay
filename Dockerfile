@@ -17,4 +17,4 @@ EXPOSE 80
 
 # command to run on container start
 # uvicorn main:app --reload
-CMD [ "uvicon", "main:app", "--reload", "--port", "80" ]
+CMD [ "uvicorn", "main:app", "--reload", "--port", "80" ]

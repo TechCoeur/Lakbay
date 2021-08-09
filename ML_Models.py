@@ -7,7 +7,4 @@ def ML_Models():
 	CoClustering_Model = pickle.load(file2)
 	file3 = open(b"Lakbay.ph/algorithms/SlopeOne_Model.sav","rb")
 	SlopeOne_Model = pickle.load(file3)
-
-if __name__ == '__main__':
-    # do something
-    ML_Models()
+	return (SVD_Model, CoClustering_Model, SlopeOne_Model)

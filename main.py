@@ -1,40 +1,19 @@
 #===============================================================================================REQUISITES=========================================================================================================
+from Imports import Imports
+from ML_models import ML_models
+from Region_Check import Region_Check
+from Travel_Plan_Proc import Travel_Plan_Proc
+from Firebase_API import Firebase_API
+from API_Mobile import API_Mobile
+
 #import required libraries, packages, and modules
-import pandas as pd
-import pickle
-import json
-import requests
-import os
-from fastapi import FastAPI
-from pydantic import BaseModel
-from starlette.responses import JSONResponse
-from typing import Dict
-from datetime import datetime
-import pyrebase
-import warnings
-warnings.simplefilter('ignore')
+Imports()
 
 #models
-file1 = open(b"Lakbay.ph/Algorithms/SVD_Model.sav","rb")
-SVD_Model = pickle.load(file1)
-file2 = open(b"Lakbay.ph/Algorithms/CoClustering_Model.sav","rb")
-CoClustering_Model = pickle.load(file2)
-file3 = open(b"Lakbay.ph/Algorithms/SlopeOne_Model.sav","rb")
-SlopeOne_Model = pickle.load(file3)
+ML_Models()
 
 #Firebase API
-config = {
-	"apiKey": "AIzaSyAzUmniefdVZKBRKHyA7HVX21y6RVDEZDU",
-	"authDomain": "lakbayph-88c82.firebaseapp.com",
-	"databaseURL": "https://lakbayph-88c82.firebaseio.com",
-	"storageBucket": "lakbayph-88c82.appspot.com"
-}
-	
-firebase = pyrebase.initialize_app(config)
-
-db = firebase.database()
-
-#==============================================================================================/REQUISITES=========================================================================================================
+Firebase_API()
 
 #===============================================================================================LOCATIONS==========================================================================================================
 #Luzon Regions
@@ -56,24 +35,24 @@ temp_cities = ["Makati","Marikina","Pasay","Pasig","Quezon","San Juan","Taguig"]
 #==============================================================================================/LOCATIONS==========================================================================================================
 
 #================================================================================================TOURS=============================================================================================================
-
-def travel_plan_tours(city, rating_high, cat_list_tours):
-	df_review = pd.read_excel("Lakbay.ph/Target_Datasets/tours_and_attractions_review.xlsx")
-	df_element = pd.read_excel("Lakbay.ph/Target_Datasets/tours_and_attractions.xlsx")
+#Travel_Plan_Tours()
+def Travel_Plan_Tours(city, rating_high, cat_list_tours):
+	df_review = pd.read_excel("Lakbay/Target_Datasets/tours_and_attractions_review.xlsx")
+	df_element = pd.read_excel("Lakbay/Target_Datasets/tours_and_attractions.xlsx")
 	#df_element = df_element.dropna()
 	rating_low = 1 #override
 
 	#step 3
 	#code priority to target city not adjacent
 	if city in temp_cities:# or city in NCR or city in I or city in II or city in III or city in IV_A or city in IV_B or city in V:
-		adjacent = pd.read_excel("Lakbay.ph/Adjacent_Cities_Dataset/Luzon.xlsx")
+		adjacent = pd.read_excel("Lakbay/Adjacent_Cities_Dataset/Luzon.xlsx")
 		#adjacent = pd.read_excel("Lakbay.ph/Adjacent_Cities_Dataset/%s.xlsx",%Island_Group)
 		adjacent = adjacent.loc[adjacent["Target"] == city]
 		adjacent = (adjacent.Adjacent.apply(lambda x: pd.Series(x.split(', '))).transpose().iloc[:,0]).values.tolist()
 		adjacent.append(city)
 		adjacent.reverse()
 		x = df_element[df_element['location'].apply(lambda x: pd.Series(x.split(', ')).isin(adjacent).any())]
-	tags_type = pd.read_excel("Lakbay.ph/Target_Datasets/tours-tags.xlsx")
+	tags_type = pd.read_excel("Lakbay/Target_Datasets/tours-tags.xlsx")
 	tag_res = tags_type.iloc[:,tags_type.columns.isin(cat_list_tours)]
 	dct = {}
 	for i in tag_res.columns:
@@ -124,7 +103,7 @@ def travel_plan_tours(city, rating_high, cat_list_tours):
 	#step 10
 	#code priority to target city not adjacent
 	if city in temp_cities:#CAR or city in NCR or city in I or city in II or city in III or city in IV_A or city in IV_B or city in V:
-		adjacent = pd.read_excel("Lakbay.ph/Adjacent_Cities_Dataset/Luzon.xlsx")
+		adjacent = pd.read_excel("Lakbay/Adjacent_Cities_Dataset/Luzon.xlsx")
 		adjacent = adjacent.loc[adjacent["Target"] == city]
 		adjacent = (adjacent.Adjacent.apply(lambda x: pd.Series(x.split(', '))).transpose().iloc[:,0]).values.tolist()
 		adjacent.append(city)
@@ -161,10 +140,10 @@ def travel_plan_tours(city, rating_high, cat_list_tours):
 #===============================================================================================/TOURS=============================================================================================================
 
 #================================================================================================RESTOS============================================================================================================
-
-def travel_plan_restos(city, rating_high):
-    df_review = pd.read_excel("Lakbay.ph/Target_Datasets/restaurants_review.xlsx")
-    df_element = pd.read_excel("Lakbay.ph/Target_Datasets/restaurants.xls")
+#Travel_Plan_Restos()
+def Travel_Plan_Restos(city, rating_high):
+    df_review = pd.read_excel("Lakbay/Target_Datasets/restaurants_review.xlsx")
+    df_element = pd.read_excel("Lakbay/Target_Datasets/restaurants.xls")
     df_element = df_element.dropna()
     cat_list_restos = ["Vegetarian Friendly", "Southeast Asian", "Other Chinese Cuisine"]#, "International", "Fast Food", "Filipino", "American", "Steakhouse", "Cafe", "Italian", "Singaporean", "Mexican","Grill", "Dessert", "Pizza", "European", "Caribbean", "Barbecue", "Seafood", "Fusion", "Japanese", "Bakery", "Contemporary", "Thai", "Diner", "Pub", "Bar", "Chinese", "Asian"] #override
 
@@ -174,7 +153,7 @@ def travel_plan_restos(city, rating_high):
     #code priority to target city not adjacent
     if city in temp_cities:#CAR or city in NCR or city in I or city in II or city in III or city in IV_A or city in IV_B or city in V:
         #os.chdir("Luzon/CAR")
-        adjacent = pd.read_excel("Lakbay.ph/Adjacent_Cities_Dataset/Luzon.xlsx")
+        adjacent = pd.read_excel("Lakbay/Adjacent_Cities_Dataset/Luzon.xlsx")
         adjacent = adjacent.loc[adjacent["Target"] == city]
         adjacent = (adjacent.Adjacent.apply(lambda x: pd.Series(x.split(', '))).transpose().iloc[:,0]).values.tolist()
         adjacent.append(city)
@@ -222,7 +201,7 @@ def travel_plan_restos(city, rating_high):
     #step 10
     #code priority to target city not adjacent
     if city in temp_cities:#CAR or city in NCR or city in I or city in II or city in III or city in IV_A or city in IV_B or city in V:
-        adjacent = pd.read_excel("Lakbay.ph/Adjacent_Cities_Dataset/Luzon.xlsx")
+        adjacent = pd.read_excel("Lakbay/Adjacent_Cities_Dataset/Luzon.xlsx")
         adjacent = adjacent.loc[adjacent["Target"] == city]
         adjacent = (adjacent.Adjacent.apply(lambda x: pd.Series(x.split(', '))).transpose().iloc[:,0]).values.tolist()
         adjacent.append(city)
@@ -259,19 +238,19 @@ def travel_plan_restos(city, rating_high):
 #===============================================================================================/RESTOS============================================================================================================
 
 #================================================================================================HOTELS============================================================================================================
-
-def travel_plan_hotels(city, rating_high, cat_list_hotels):
+#Travel_Plan_Hotels()
+def Travel_Plan_Hotels(city, rating_high, cat_list_hotels):
     #step 1
     #load datasets
-    df_review = pd.read_excel("Lakbay.ph/Target_Datasets/hotels_and_lodging_review.xlsx")
-    df_element = pd.read_excel("Lakbay.ph/Target_Datasets/hotels_and_lodging.xlsx")#, orient='records')
+    df_review = pd.read_excel("Lakbay/Target_Datasets/hotels_and_lodging_review.xlsx")
+    df_element = pd.read_excel("Lakbay/Target_Datasets/hotels_and_lodging.xlsx")#, orient='records')
     #df_element = df_element.dropna()
     rating_low = 1 #override
     #step 3
     #code priority to target city not adjacent
     if city in temp_cities:#CAR or city in NCR or city in I or city in II or city in III or city in IV_A or city in IV_B or city in V:
         #os.chdir("Luzon/CAR")
-        adjacent = pd.read_excel("Lakbay.ph/Adjacent_Cities_Dataset/Luzon.xlsx")
+        adjacent = pd.read_excel("Lakbay/Adjacent_Cities_Dataset/Luzon.xlsx")
         adjacent = adjacent.loc[adjacent["Target"] == city]
         adjacent = (adjacent.Adjacent.apply(lambda x: pd.Series(x.split(', '))).transpose().iloc[:,0]).values.tolist()
         adjacent.append(city)
@@ -326,7 +305,7 @@ def travel_plan_hotels(city, rating_high, cat_list_hotels):
     #step 10
     #code priority to target city not adjacent
     if city in temp_cities:#CAR or city in NCR or city in I or city in II or city in III or city in IV_A or city in IV_B or city in V:
-        adjacent = pd.read_excel("Lakbay.ph/Adjacent_Cities_Dataset/Luzon.xlsx")
+        adjacent = pd.read_excel("Lakbay/Adjacent_Cities_Dataset/Luzon.xlsx")
         adjacent = adjacent.loc[adjacent["Target"] == city]
         adjacent = (adjacent.Adjacent.apply(lambda x: pd.Series(x.split(', '))).transpose().iloc[:,0]).values.tolist()
         adjacent.append(city)
@@ -363,6 +342,7 @@ def travel_plan_hotels(city, rating_high, cat_list_hotels):
 #===============================================================================================/HOTELS============================================================================================================
 
 #===============================================================================================MACHINE============================================================================================================
+#API_Mobile()
 class Rating(BaseModel):
 	name: str = None
 	city: Dict[str,str]
@@ -397,21 +377,21 @@ async def create_item(rating:Rating):
 	cat_list_tours = ['Water & Seaside Sports & Activities','Architecture, Art, History, & Museums','Places in the City'] #override
 	cat_list_hotels = [2,3,4,5] #override
 
-
+#Travel_Plan_Proc()
 #TRAVEL PLAN_1
 #tours
 	db.child("travelplan").child(user_id).remove()
 	
 	#db.child("travelplan").child(user_id).set(user_id)
-	file = ("Lakbay.ph/Recc/Null/null_tours.json")	
+	file = ("Lakbay/Recc/Null/null_tours.json")	
 	with open(file) as json_file:
 			data = json.load(json_file)
 	db.child("travelplan").child(user_id).child('plan_1').child('tours').set(data)
-	file = ("Lakbay.ph/Recc/Null/null_restos.json")	
+	file = ("Lakbay/Recc/Null/null_restos.json")	
 	with open(file) as json_file:
 			data = json.load(json_file)
 	db.child("travelplan").child(user_id).child('plan_1').child('resto').set(data)
-	file = ("Lakbay.ph/Recc/Null/null_hotels.json")	
+	file = ("Lakbay/Recc/Null/null_hotels.json")	
 	with open(file) as json_file:
 			data = json.load(json_file)
 	db.child("travelplan").child(user_id).child('plan_1').child('hotel').set(data)
@@ -429,8 +409,8 @@ async def create_item(rating:Rating):
 	#db.child("travelplan").child(user_id).child("timestamp").set(timestampStr)
 	print("Status:")
 	try:
-		alpha = travel_plan_tours(city, rating_high, cat_list_tours).to_json("Lakbay.ph/Recc/Procs/%s_tours.json" %user_id, orient='records')
-		file = ("Lakbay.ph/Recc/Procs/%s_tours.json" %user_id)	
+		alpha = travel_plan_tours(city, rating_high, cat_list_tours).to_json("Lakbay/Recc/Procs/%s_tours.json" %user_id, orient='records')
+		file = ("Lakbay/Recc/Procs/%s_tours.json" %user_id)	
 		with open(file) as json_file:
 			data = json.load(json_file)
 		db.child("travelplan").child(user_id).child('plan_1').child('tours').set(data)
@@ -445,7 +425,7 @@ async def create_item(rating:Rating):
 #restos
 	try:
 		bravo = travel_plan_restos(city, rating_high).to_json("Lakbay.ph/Recc/Procs/%s_restos.json" %user_id, orient='records')
-		file = ("Lakbay.ph/Recc/Procs/%s_restos.json" %user_id)
+		file = ("Lakbay/Recc/Procs/%s_restos.json" %user_id)
 		with open(file) as json_file:
 			data = json.load(json_file)
 		db.child("travelplan").child(user_id).child('plan_1').child('resto').set(data)

@@ -57,7 +57,7 @@ def Travel_Plan_Proc():
 		print (status_restos)
 		db.child("travelplan").child(user_id).child('plan_1').child('restos_status').set(status_restos)
 
-#hotels
+	#hotels
 	try:
 		charlie = travel_plan_hotels(city, rating_high, cat_list_hotels).to_json("Lakbay.ph/Recc/Procs/%s_hotels.json" %user_id, orient='records')	
 		file = ("Lakbay.ph/Recc/Procs/%s_hotels.json" %user_id)
@@ -72,9 +72,5 @@ def Travel_Plan_Proc():
 		print (status_hotels)
 		db.child("travelplan").child(user_id).child('plan_1').child('hotels_status').set(status_hotels)
 	pass
-
-if __name__ == '__main__':
-    # do something
-    Travel_Plan_Proc()
-
+	
 #Supposedly ARH have separate python scripts so they can perform in parallel
